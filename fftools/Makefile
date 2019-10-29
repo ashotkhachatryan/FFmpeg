@@ -29,7 +29,10 @@ endef
 
 $(foreach P,$(AVPROGS-yes),$(eval $(call DOFFTOOL,$(P))))
 
-all: $(AVPROGS)
+libfftools: fftools/ffmpeg_lib.o fftools/ffplay_lib.o fftools/ffprobe_lib.o
+	ar rcs fftools/libfftools.a fftools/cmdutils.o fftools/ffmpeg_filter.o fftools/ffmpeg_hw.o fftools/ffmpeg_lib.o fftools/ffmpeg_opt.o fftools/ffplay_lib.o fftools/ffprobe_lib.o
+
+all: $(AVPROGS) libfftools
 
 fftools/ffprobe.o fftools/cmdutils.o: libavutil/ffversion.h | fftools
 OUTDIRS += fftools
@@ -44,6 +47,8 @@ install-progs-$(CONFIG_SHARED): install-libs
 install-progs: install-progs-yes $(AVPROGS)
 	$(Q)mkdir -p "$(BINDIR)"
 	$(INSTALL) -c -m 755 $(AVPROGS) "$(BINDIR)"
+	$(Q)mkdir -p "$(LIBDIR)"
+	$(INSTALL) -c -m 755 fftools/libfftools.a "$(LIBDIR)"
 
 uninstall: uninstall-progs
 
