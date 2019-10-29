@@ -51,6 +51,8 @@ install-progs: install-progs-yes $(AVPROGS)
 	$(INSTALL) -c -m 755 fftools/libfftools.a "$(LIBDIR)"
 	$(Q)mkdir -p "$(INCDIR)"
 	$(INSTALL) -c -m 755 config.h "$(INCDIR)"
+	$(Q)mkdir -p "$(INCDIR)"/libfftools
+	$(INSTALL) -c -m 755 fftools/cmdutils.h fftools/ffmpeg.h "$(INCDIR)"/libfftools
 
 uninstall: uninstall-progs
 
