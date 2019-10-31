@@ -29,8 +29,8 @@ endef
 
 $(foreach P,$(AVPROGS-yes),$(eval $(call DOFFTOOL,$(P))))
 
-libfftools: fftools/ffmpeg_lib.o fftools/ffplay_lib.o fftools/ffprobe_lib.o
-	ar rcs fftools/libfftools.a fftools/cmdutils.o fftools/ffmpeg_filter.o fftools/ffmpeg_hw.o fftools/ffmpeg_lib.o fftools/ffmpeg_opt.o fftools/ffplay_lib.o fftools/ffprobe_lib.o
+libfftools: fftools/ffmpeg_lib.o fftools/ffprobe_lib.o
+	ar rcs fftools/libfftools.a fftools/cmdutils.o fftools/ffmpeg_filter.o fftools/ffmpeg_hw.o fftools/ffmpeg_lib.o fftools/ffmpeg_opt.o fftools/ffprobe_lib.o
 
 all: $(AVPROGS) libfftools
 
@@ -53,6 +53,14 @@ install-progs: install-progs-yes $(AVPROGS)
 	$(INSTALL) -c -m 755 config.h "$(INCDIR)"
 	$(Q)mkdir -p "$(INCDIR)"/libfftools
 	$(INSTALL) -c -m 755 fftools/cmdutils.h fftools/ffmpeg.h "$(INCDIR)"/libfftools
+	$(INSTALL) -c -m 755 libavutil/internal.h "$(INCDIR)"/libavutil/
+	$(INSTALL) -c -m 755 libavutil/timer.h "$(INCDIR)"/libavutil/
+	$(Q)mkdir -p "$(INCDIR)"/libavutil/x86
+	$(INSTALL) -c -m 755 libavutil/x86/timer.h "$(INCDIR)"/libavutil/x86/
+	$(INSTALL) -c -m 755 libavutil/x86/emms.h "$(INCDIR)"/libavutil/x86/
+	$(INSTALL) -c -m 755 libavutil/libm.h "$(INCDIR)"/libavutil/
+	$(Q)mkdir -p "$(INCDIR)"/compat
+	$(INSTALL) -c -m 755 compat/w32pthreads.h "$(INCDIR)"/compat/
 
 uninstall: uninstall-progs
 
