@@ -27,10 +27,15 @@ $(1)$(PROGSSUF)_g$(EXESUF): FF_EXTRALIBS += $(EXTRALIBS-$(1))
 -include $$(OBJS-$(1):.o=.d)
 endef
 
+OBJS-fftools                       += fftools/cmdutils.o fftools/ffmpeg_filter.o fftools/ffmpeg_hw.o fftools/ffmpeg_lib.o fftools/ffmpeg_opt.o fftools/ffprobe_lib.o
+ifdef CONFIG_VIDEOTOOLBOX
+OBJS-fftools                       += fftools/ffmpeg_videotoolbox.o
+endif
+
 $(foreach P,$(AVPROGS-yes),$(eval $(call DOFFTOOL,$(P))))
 
 libfftools: fftools/ffmpeg_lib.o fftools/ffprobe_lib.o
-	ar rcs fftools/libfftools.a fftools/cmdutils.o fftools/ffmpeg_filter.o fftools/ffmpeg_hw.o fftools/ffmpeg_lib.o fftools/ffmpeg_opt.o fftools/ffprobe_lib.o fftools/ffmpeg_videotoolbox.o
+	ar rcs fftools/libfftools.a $(OBJS-fftools)
 
 all: $(AVPROGS) libfftools
 
